@@ -1,5 +1,6 @@
 lorom
 
+incsrc macros.asm
 incsrc bank_80.asm
 incsrc bank_81.asm
 incsrc bank_82.asm
@@ -48,4 +49,5 @@ incsrc bank_AC.asm
 incsrc bank_AD.asm
 incsrc bank_AE.asm
 incsrc bank_AF.asm
-incsrc labels.asm
+incsrc labels.asm ; Labels that don't point directly to ROM/RAM
+incsrc memory.asm ; Memory labels

@@ -8,52 +8,52 @@ Boot:
     JML.L .bank80                        ;808003; Execute in bank $80 (FastROM)
 
   .bank80:
-    STZ.W $4200                          ;808007;
-    STZ.W $420C                          ;80800A;
-    STZ.W $420B                          ;80800D;
-    LDA.B #$00                           ;808010;
-    STA.L $7EFFFF                        ;808012;
+    STZ.W $4200                          ;808007; Disable NMI, H/V IRQ timers, and auto-read joypad
+    STZ.W $420C                          ;80800A; Disable all HDMA channels
+    STZ.W $420B                          ;80800D; Disable all DMA channels
+    LDA.B #$00                           ;808010; \
+    STA.L APU_ReadyFlag                  ;808012; } Clear APU ready flag
 
 CODE_808016:
-    LDA.B #$01                           ;808016;
-    STA.W $420D                          ;808018;
-    LDA.B #$86                           ;80801B;
-    PHA                                  ;80801D;
-    PLB                                  ;80801E;
+    LDA.B #$01                           ;808016; \
+    STA.W $420D                          ;808018; } Enable FastROM
+    LDA.B #$86                           ;80801B; \
+    PHA                                  ;80801D; } Switch to data bank $86 to load hardware register init data
+    PLB                                  ;80801E; /
     REP #$10                             ;80801F;
-    LDX.W #$8000                         ;808021;
+    LDX.W #HW_Reg_Init_Data              ;808021; X = hardware register init data address ($86:8000)
 
-CODE_808024:
-    LDA.W $0000,X                        ;808024;
-    BEQ CODE_808052                      ;808027;
-    LSR A                                ;808029;
-    STA.B $00                            ;80802A;
-    INX                                  ;80802C;
-    LDA.W $0000,X                        ;80802D;
-    STA.B $10                            ;808030;
-    INX                                  ;808032;
-    LDA.W $0000,X                        ;808033;
-    STA.B $11                            ;808036;
-    INX                                  ;808038;
+  .initHWRegisterBlock:
+    LDA.W $0000,X                        ;808024; A = lllllllb (l = number of registers to initialize, b = 16-bit register flag)
+    BEQ .doneInitHWRegisters             ;808027; If A != 0 (list not terminated),
+    LSR A                                ;808029; A = number of registers to initialize, C = 1 if registers are 16-bit
+    STA.B $00                            ;80802A; Scratch RAM $00 = remaining registers count
+    INX                                  ;80802C; \
+    LDA.W $0000,X                        ;80802D; |
+    STA.B $10                            ;808030; |
+    INX                                  ;808032; } Scratch RAM $10 = address of first hardware register to initialize
+    LDA.W $0000,X                        ;808033; |
+    STA.B $11                            ;808036; /
+    INX                                  ;808038; X = address of value to initialize first register with
 
-CODE_808039:
-    LDA.W $0000,X                        ;808039;
-    STA.B ($10)                          ;80803C;
-    INX                                  ;80803E;
-    BCC CODE_808047                      ;80803F;
-    LDA.W $0000,X                        ;808041;
-    STA.B ($10)                          ;808044;
-    INX                                  ;808046;
+  .initHWRegister:
+    LDA.W $0000,X                        ;808039; \
+    STA.B ($10)                          ;80803C; } Initialize low byte of register at ($10)
+    INX                                  ;80803E; /
+    BCC .registersAre8Bit                ;80803F; \
+    LDA.W $0000,X                        ;808041; } If register is 16-bit, initialize high byte of register at ($10)
+    STA.B ($10)                          ;808044; /
+    INX                                  ;808046; X = address of value to initialize next register with
 
-CODE_808047:
-    LDY.B $10                            ;808047;
-    INY                                  ;808049;
-    STY.B $10                            ;80804A;
-    DEC.B $00                            ;80804C;
-    BNE CODE_808039                      ;80804E;
-    BRA CODE_808024                      ;808050;
+  .registersAre8Bit:
+    LDY.B $10                            ;808047; \
+    INY                                  ;808049; } Scratch RAM $10 = address of next register to initialize
+    STY.B $10                            ;80804A; /
+    DEC.B $00                            ;80804C; Decrement remaining registers count
+    BNE .initHWRegister                  ;80804E; If [remaining registers count] > 0, initialize next register
+    BRA .initHWRegisterBlock             ;808050; Else, move to next block of registers
 
-CODE_808052:
+  .doneInitHWRegisters:
     REP #$30                             ;808052;
     LDX.W #$1F9F                         ;808054;
 
