@@ -1,12 +1,13 @@
 ORG $808000
 
-CODE_808000:
-    SEI                                  ;808000;
-    CLC                                  ;808001;
-    XCE                                  ;808002;
-    JML.L CODE_808007                    ;808003;
+;;; $8000: Boot ;;;
+Boot:
+    SEI                                  ;808000; Disable IRQ
+    CLC                                  ;808001; \
+    XCE                                  ;808002; } Enable native mode
+    JML.L .bank80                        ;808003; Execute in bank $80 (FastROM)
 
-CODE_808007:
+  .bank80:
     STZ.W $4200                          ;808007;
     STZ.W $420C                          ;80800A;
     STZ.W $420B                          ;80800D;
@@ -814,7 +815,7 @@ CODE_8085BF:
     LDY.B #$00                           ;8085DE;
 
 CODE_8085E0:
-    LDA.L TEXT_80FFC0,X                  ;8085E0;
+    LDA.L ROM_HEADER,X                   ;8085E0;
     CMP.L $7EFFA0,X                      ;8085E4;
     STA.L $7EFFA0,X                      ;8085E8;
     BEQ CODE_8085EF                      ;8085EC;
@@ -18253,23 +18254,86 @@ CODE_80FFAC:
     db $00,$00,$FF,$FF,$FF,$FF,$FF,$FF   ;80FFB0;
     db $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF   ;80FFB8;
 
-TEXT_80FFC0:
+
+ROM_HEADER:
     db "MEGAMAN X            "           ;80FFC0;
-    db $30,$00,$0B,$00,$01,$08,$00       ;80FFD5;
-    dw $AA04,$55FB                       ;80FFDC;
+
+  .ROMSpeed_MapMode:
+; ROM speed and map mode: FastROM, LoROM
+    db $30                               ;80FFD5;
+
+  .chipset
+; Chipset: ROM only
+    db $00                               ;80FFD6;
+
+  .ROMSize:
+; ROM size: 200000h bytes = 2 MiB
+    db $0B                               ;80FFD7;
+
+  .SRAMSize:
+; SRAM size: None
+    db $00                               ;80FFD8;
+
+  .country:
+; Country code: USA
+    db $01                               ;80FFD9;
+
+  .developer:
+; Developer code: Capcom
+    db $08                               ;80FFDA;
+
+  .version:
+; Version number
+    db $00                               ;80FFDB;
+
+  .complement:
+; Checksum complement
+    dw $AA04                             ;80FFDC;
+
+  .checksum:
+; Checksum
+    dw $55FB                             ;80FFDE;
+
+; Native interrupt vectors
     dw PTR16_80FFFF                      ;80FFE0;
     dw PTR16_80FFFF                      ;80FFE2;
+
+Native_COP:
     dw CODE_80FFAC                       ;80FFE4;
+
+Native_BRK:
     dw CODE_80FFAC                       ;80FFE6;
+
+Native_ABORT:
     dw CODE_80FFAC                       ;80FFE8;
+
+Native_NMI:
     dw CODE_80FFA4                       ;80FFEA;
+
+Native_RESET:
     dw CODE_80FFAC                       ;80FFEC;
+
+Native_IRQ:
     dw CODE_80FFA8                       ;80FFEE;
+
+; Emulation interrupt vectors
     dw PTR16_80FFFF                      ;80FFF0;
     dw PTR16_80FFFF                      ;80FFF2;
+
+Emulation_COP:
     dw CODE_80FFAC                       ;80FFF4;
+
+Emulation_BRK:
     dw CODE_80FFAC                       ;80FFF6;
+
+Emulation_ABORT:
     dw CODE_80FFAC                       ;80FFF8;
+
+Emulation_NMI:
     dw CODE_80FFAC                       ;80FFFA;
-    dw CODE_808000                       ;80FFFC;
+
+Emulation_RESET:
+    dw Boot                              ;80FFFC;
+
+Emulation_IRQBRK:
     dw CODE_80FFAC                       ;80FFFE;
