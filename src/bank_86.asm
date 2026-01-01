@@ -4,19 +4,19 @@ ORG $868000
 HW_Reg_Init_Data:
     %hwRegInitDataEntry8($2100,          ;868000;
       $80, ; PPU Register $2100 (INIDISP) = $80: Enable forced blanking, brightness = 0
-      $03, ; PPU Register $2101 (OBJSEL)  = $03:
-      $00, ; PPU Register $2102 (OAMADDL) = $00:
-      $00) ; PPU Register $2103 (OAMADDH) = $00:
+      $03, ; PPU Register $2101 (OBJSEL)  = $03: Sprite tiles base address = $6000, sprite sizes = 8x8 / 16x16
+      $00, ; PPU Register $2102 (OAMADDL) = $00: \
+      $00) ; PPU Register $2103 (OAMADDH) = $00: } OAM address = 0, no priority rotation
 
     %hwRegInitDataEntry8($2105,          ;868007;
-      $09,
-      $00,
-      $51,
-      $59,
-      $0A,
-      $00,
-      $11,
-      $00)
+      $09, ; PPU Register $2105 (BGMODE)  = $09: BG mode = 1 with BG3 priority, BG tile sizes = 8x8
+      $00, ; PPU Register $2106 (MOSAIC)  = $00: Disable mosaic
+      $51, ; PPU Register $2107 (BG1SC)   = $51: BG1 tilemap base address = $5000, size = 64x32
+      $59, ; PPU Register $2108 (BG2SC)   = $59: BG2 tilemap base address = $5800, size = 64x32
+      $0A, ; PPU Register $2109 (BG3SC)   = $0A: BG3 tilemap base address = $0800, size = 32x64
+      $00, ; PPU Register $210A (BG4SC)   = $00: BG4 tilemap base address = $0000, size = 32x32
+      $11, ; PPU Register $210B (BG12NBA) = $11: BG1 tile base address = $1000, BG2 tile base address =  $1000
+      $00) ; PPU Register $210C (BG34NBA) = $00: BG3 tile base address = $0000, BG4 tile base address =  $0000
 
     %hwRegInitDataEntry16($210D,         ;868012;
       $0000,
