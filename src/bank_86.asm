@@ -19,14 +19,14 @@ HW_Reg_Init_Data:
       $00) ; PPU Register $210C (BG34NBA) = $00: BG3 tile base address = $0000, BG4 tile base address =  $0000
 
     %hwRegInitDataEntry16($210D,         ;868012;
-      $0000,
-      $0000,
-      $0000,
-      $0000,
-      $0000,
-      $0000,
-      $0000,
-      $0000)
+      $0000, ; PPU Register $210D (BG1HOFS) = $0000: BG1 horizontal scroll offset = 0
+      $0000, ; PPU Register $210E (BG1VOFS) = $0000: BG1 vertical scroll offset = 0
+      $0000, ; PPU Register $210F (BG2HOFS) = $0000: BG2 horizontal scroll offset = 0
+      $0000, ; PPU Register $2110 (BG2VOFS) = $0000: BG2 vertical scroll offset = 0
+      $0000, ; PPU Register $2111 (BG3HOFS) = $0000: BG3 horizontal scroll offset = 0
+      $0000, ; PPU Register $2112 (BG3VOFS) = $0000: BG3 vertical scroll offset = 0
+      $0000, ; PPU Register $2113 (BG4HOFS) = $0000: BG4 horizontal scroll offset = 0
+      $0000) ; PPU Register $2114 (BG4VOFS) = $0000: BG4 vertical scroll offset = 0
 
     %hwRegInitDataEntry8($2115,          ;868025;
       $80,
