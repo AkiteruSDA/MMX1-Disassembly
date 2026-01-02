@@ -15,8 +15,8 @@ HW_Reg_Init_Data:
       $59, ; PPU Register $2108 (BG2SC)   = $59: BG2 tilemap base address = $5800, size = 64x32
       $0A, ; PPU Register $2109 (BG3SC)   = $0A: BG3 tilemap base address = $0800, size = 32x64
       $00, ; PPU Register $210A (BG4SC)   = $00: BG4 tilemap base address = $0000, size = 32x32
-      $11, ; PPU Register $210B (BG12NBA) = $11: BG1 tile base address = $1000, BG2 tile base address =  $1000
-      $00) ; PPU Register $210C (BG34NBA) = $00: BG3 tile base address = $0000, BG4 tile base address =  $0000
+      $11, ; PPU Register $210B (BG12NBA) = $11: BG1 tile base address = $1000, BG2 tile base address = $1000
+      $00) ; PPU Register $210C (BG34NBA) = $00: BG3 tile base address = $0000, BG4 tile base address = $0000
 
     %hwRegInitDataEntry16($210D,         ;868012;
       $0000, ; PPU Register $210D (BG1HOFS) = $0000: BG1 horizontal scroll offset = 0
@@ -29,23 +29,23 @@ HW_Reg_Init_Data:
       $0000) ; PPU Register $2114 (BG4VOFS) = $0000: BG4 vertical scroll offset = 0
 
     %hwRegInitDataEntry8($2115,          ;868025;
-      $80,
-      $00,
-      $00)
+      $80, ; PPU Register $2115 (VMAIN) = $80: VRAM address increment mode = increment on writing $2119 or reading $213A, 1-word (2-byte) increment
+      $00, ; PPU Register $2116 (VMADDL) = $00: VRAM address low byte = $00
+      $00) ; PPU Register $2117 (VMADDH) = $00: VRAM address high byte = $00
 
     %hwRegInitDataEntry8($211A,          ;86802B;
-      $00)
+      $00) ; PPU Register $211A (M7SEL) = $00: Reset mode 7 settings
 
     %hwRegInitDataEntry16($211B,         ;86802F;
-      $0100,
-      $0000,
-      $0000,
-      $0100,
-      $0000,
-      $0000)
+      $0100, ; PPU Register $211B (M7A) = $0100: \
+      $0000, ; PPU Register $211C (M7B) = $0000: |
+      $0000, ; PPU Register $211D (M7C) = $0000: } Mode 7 transformation matrix = {{256, 0}, {0, 256}}
+      $0100, ; PPU Register $211E (M7D) = $0100: /
+      $0000, ; PPU Register $211F (M7X) = $0000: Mode 7 transformation origin co-ordinate X = 0
+      $0000) ; PPU Register $2120 (M7Y) = $0000: Mode 7 transformation origin co-ordinate Y = 0
 
     %hwRegInitDataEntry8($2121,          ;86803E;
-      $00)
+      $00) ; PPU Register $2121 (CGADD) = $00: CGRAM address = 0
 
     %hwRegInitDataEntry8($2123,          ;868042;
       $00,
