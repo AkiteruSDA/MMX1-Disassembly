@@ -48,38 +48,38 @@ HW_Reg_Init_Data:
       $00) ; PPU Register $2121 (CGADD) = $00: CGRAM address = 0
 
     %hwRegInitDataEntry8($2123,          ;868042;
-      $00,
-      $00,
-      $00,
-      $00,
-      $FF,
-      $00,
-      $FF,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $BF,
-      $E0,
-      $00)
+      $00, ; PPU Register $2123 (W12SEL)  = $00: Disable window 1 and window 2 for BG1 and BG2
+      $00, ; PPU Register $2124 (W34SEL)  = $00: Disable window 3 and window 4 for BG3 and BG4
+      $00, ; PPU Register $2125 (WOBJSEL) = $00: Disable windows for sprites
+      $00, ; PPU Register $2126 (WH0)     = $00: Window 1 horizontal position left = 0
+      $FF, ; PPU Register $2127 (WH1)     = $FF: Window 1 horizontal position right = 255
+      $00, ; PPU Register $2128 (WH2)     = $00: Window 2 horizontal position left = 0
+      $FF, ; PPU Register $2129 (WH3)     = $FF: Window 2 horizontal position right = 255
+      $00, ; PPU Register $212A (WBGLOG)  = $00: Disable window mask logic for backgrounds
+      $00, ; PPU Register $212B (WOBJLOG) = $00: Disable window mask logic for sprites
+      $00, ; PPU Register $212C (TM)      = $00: Disable background and sprite layers
+      $00, ; PPU Register $212D (TS)      = $00: Disable background and sprite layers for color math (subscreen)
+      $00, ; PPU Register $212E (TMW)     = $00: Disable window layers for main screen
+      $00, ; PPU Register $212F (TSW)     = $00: Disable window layers for subscreen
+      $00, ; PPU Register $2130 (CGWSEL)  = $00: Disable window black region/transparency
+      $BF, ; PPU Register $2131 (CGADSUB) = $BF: Enable BG/sprite color math, backdrop color math, no half color math, subtraction mode
+      $E0, ; PPU Register $2132 (COLDATA) = $E0: Write black to all color channels
+      $00) ; PPU Register $2133 (SETINI)  = $00: No interlacing, disable overscan, disable hi-res
 
     %hwRegInitDataEntry8($4200,          ;868056;
-      $00,
-      $FF,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00,
-      $00)
+      $00, ; MMIO Register $4200 (NMITIMEN) = $00: Disable NMI, H/V IRQ timers, and auto-read joypad (again?)
+      $FF, ; MMIO Register $4201 (WRIO)     = $FF: Enable controller port I/O
+      $00, ; MMIO Register $4202 (WRMPYA)   = $00: Unsigned multiplier factor A = 0
+      $00, ; MMIO Register $4203 (WRMPYA)   = $00: Unsigned multiplier factor B = 0
+      $00, ; MMIO Register $4204 (WRDIVL)   = $00: Unsigned divider dividend low byte = 0
+      $00, ; MMIO Register $4205 (WRDIVH)   = $00: Unsigned divider dividend high byte = 0
+      $00, ; MMIO Register $4206 (WRDIVB)   = $00: Unsigned divider divisor = 0
+      $00, ; MMIO Register $4207 (HTIMEL)   = $00: H IRQ counter target low byte = 0
+      $00, ; MMIO Register $4208 (HTIMEH)   = $00: H IRQ counter target high byte = 0
+      $00, ; MMIO Register $4209 (VTIMEL)   = $00: V IRQ counter target low byte = 0
+      $00, ; MMIO Register $420A (VTIMEH)   = $00: V IRQ counter target high byte = 0
+      $00, ; MMIO Register $420B (MDMAEN)   = $00: Disable all DMA channels (again?)
+      $00) ; MMIO Register $420C (HDMAEN)   = $00: Disable all HDMA channels (again?)
 
     db $00                               ;868066; Terminate hardware register init data list
 
